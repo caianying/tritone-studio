@@ -114,7 +114,7 @@ export default function Hero() {
           transition={{ duration: 1.1, delay: 0.85 }}
           className="mt-6 max-w-[480px] text-[15.5px] leading-[1.7] tracking-[-0.01em] text-[#9a9a9a]"
         >
-          三个人，一间棚。写歌、录音、混音、配乐 —— 从第一颗音符到最后一轨母带，我们都认真到底。
+          一间棚，一支团队。写歌、录音、混音、配乐 —— 从第一颗音符到最后一轨母带，我们都认真到底。
         </motion.p>
 
         <motion.div

@@ -105,7 +105,7 @@ export default function Members() {
               transition={{ duration: 0.8 }}
               className="section-tag"
             >
-              成员 · THE TRIO
+              成员 · THE CREW
             </motion.span>
             <motion.h2
               initial={{ opacity: 0, y: 24 }}
@@ -114,8 +114,8 @@ export default function Members() {
               transition={{ duration: 0.9, delay: 0.1 }}
               className="section-title"
             >
-              三个人，
-              <em className="stroke-text font-display not-italic">三种频率</em>。
+              一支团队，
+              <em className="stroke-text font-display not-italic">各有频率</em>。
             </motion.h2>
           </div>
           <div className="flex flex-col items-end gap-6">

@@ -4,7 +4,7 @@ import { DustParticles } from "@/components/ThreeFX";
 
 const STATS = [
   { value: "120+", label: "完成作品" },
-  { value: "3", label: "双金耳朵认证成员" },
+  { value: "1", label: "间棚，整支团队" },
   { value: "5.1", label: "环绕混录棚" },
 ];
 
