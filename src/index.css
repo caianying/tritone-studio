@@ -40,7 +40,8 @@
   body {
     background: #000;
     color: #fff;
-    font-family: "Inter", "PingFang SC", "Noto Sans SC", system-ui, -apple-system, sans-serif;
+    font-family: "Fraunces", "Noto Serif SC", "Songti SC", serif;
+    font-weight: 400;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
