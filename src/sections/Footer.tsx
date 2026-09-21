@@ -1,5 +1,6 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
+import { DustParticles } from "@/components/ThreeFX";
 
 const STATS = [
   { value: "120+", label: "完成作品" },
@@ -18,7 +19,8 @@ export default function Footer() {
 
   return (
     <footer ref={ref} id="contact" className="relative overflow-hidden">
-      {/* 底部琥珀光晕 */}
+      {/* 底部琥珀光晕 + 尘埃粒子 */}
+      <DustParticles />
       <motion.div
         style={{ y: glowY, opacity: glowOpacity }}
         className="pointer-events-none absolute bottom-[-30%] left-1/2 h-[70vmin] w-[110vmin] -translate-x-1/2 rounded-full blur-[140px]"

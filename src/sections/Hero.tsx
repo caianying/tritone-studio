@@ -1,6 +1,7 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 import { HeroWaves } from "@/components/Waves";
+import { WaveField3D } from "@/components/ThreeFX";
 
 export default function Hero() {
   const ref = useRef<HTMLElement>(null);
@@ -18,6 +19,7 @@ export default function Hero() {
       className="relative flex min-h-[100svh] flex-col items-center justify-end overflow-hidden pb-[16vh]"
     >
       <HeroWaves scrollYProgress={scrollYProgress} />
+      <WaveField3D />
 
       {/* 幽灵描边字 */}
       <span className="ghost-word" aria-hidden>TRITONE</span>
