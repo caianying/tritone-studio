@@ -115,7 +115,7 @@ export default function Works() {
                 className="section-title whitespace-nowrap"
               >
                 这些年，
-                <em className="serif-accent">我们留下的声音</em>
+                <em className="stroke-text font-display not-italic">我们留下的声音</em>
               </motion.h2>
             </div>
             <motion.span

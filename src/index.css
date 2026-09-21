@@ -60,8 +60,8 @@
   }
 
   ::selection {
-    background: rgba(245, 158, 11, 0.35);
-    color: #fff;
+    background: var(--acid);
+    color: #000;
   }
 }
 
@@ -75,6 +75,7 @@
   --amber: #f59e0b;
   --blue: #60a5fa;
   --violet: #c084fc;
+  --acid: #d9f24f;
   --serif: "Fraunces", "Noto Serif SC", "Songti SC", serif;
 }
 
@@ -91,6 +92,51 @@
   font-weight: 400;
   letter-spacing: 0;
   color: #9a9a9a;
+}
+
+/* 酸性荧光强调字 */
+.em-acid {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: 0;
+  color: var(--acid);
+}
+
+/* 描边镂空字 */
+.stroke-text {
+  color: transparent;
+  -webkit-text-stroke: 1.5px rgba(255, 255, 255, 0.85);
+}
+
+.stroke-faint {
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.4);
+}
+
+/* 贴纸式标签 */
+.sticker {
+  display: inline-block;
+  background: var(--acid);
+  color: #000;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  padding: 8px 16px;
+  border: 1.5px solid #000;
+  box-shadow: 4px 4px 0 rgba(255, 255, 255, 0.9);
+  transform: rotate(-6deg);
+}
+
+.sticker-ghost {
+  display: inline-block;
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 11px;
+  letter-spacing: 0.28em;
+  padding: 7px 14px;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transform: rotate(3deg);
 }
 
 /* ---------- film grain ---------- */
@@ -164,13 +210,13 @@
   gap: 8px;
   height: 44px;
   padding: 0 22px;
-  border-radius: 8px;
+  border-radius: 3px;
   font-size: 14px;
   font-weight: 500;
   letter-spacing: -0.01em;
   line-height: 1;
   white-space: nowrap;
-  transition: box-shadow 0.35s ease, border-color 0.35s ease, filter 0.35s ease;
+  transition: box-shadow 0.25s ease, border-color 0.25s ease, filter 0.35s ease, transform 0.25s ease;
 }
 
 .btn::after {
@@ -195,7 +241,8 @@
 }
 
 .btn-solid:hover {
-  box-shadow: inset 0 1px 0 #fff, 0 0 26px rgba(186, 208, 255, 0.4), 0 8px 18px rgba(255, 255, 255, 0.12);
+  box-shadow: 5px 5px 0 var(--acid);
+  transform: translate(-2px, -2px);
 }
 
 .btn-ghost {
@@ -207,8 +254,9 @@
 }
 
 .btn-ghost:hover {
-  border-color: rgba(220, 230, 255, 0.8);
-  box-shadow: 0 0 24px rgba(170, 200, 255, 0.25);
+  border-color: var(--acid);
+  box-shadow: 5px 5px 0 rgba(217, 242, 79, 0.3);
+  transform: translate(-2px, -2px);
 }
 
 /* ---------- section shells ---------- */
@@ -222,12 +270,22 @@
   align-items: center;
   gap: 8px;
   padding: 8px 14px;
-  border-radius: 6px;
+  border-radius: 3px;
   font-size: 12.5px;
   letter-spacing: 0.12em;
   color: #d4d4d4;
   border: 1px solid var(--border);
   background: linear-gradient(90deg, rgba(125, 125, 125, 0.25), rgba(10, 10, 10, 0.6));
+}
+
+.section-tag::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  background: var(--acid);
+  border-radius: 1px;
+  transform: rotate(45deg);
+  flex-shrink: 0;
 }
 
 .section-title {
@@ -290,11 +348,18 @@
 .member-role-chip {
   display: inline-block;
   padding: 5px 10px;
-  border-radius: 5px;
   font-size: 11.5px;
   letter-spacing: 0.08em;
   color: #0a0a0a;
   font-weight: 600;
+  border: 1.5px solid #000;
+  box-shadow: 2.5px 2.5px 0 rgba(255, 255, 255, 0.85);
+  transform: rotate(-2deg);
+  transition: transform 0.3s ease;
+}
+
+.member-card:hover .member-role-chip {
+  transform: rotate(1deg) scale(1.04);
 }
 
 /* ---------- works ---------- */
@@ -314,7 +379,7 @@
 }
 
 .work-row:hover {
-  background: linear-gradient(90deg, rgba(255, 255, 255, 0.04), transparent 70%);
+  background: linear-gradient(90deg, rgba(217, 242, 79, 0.05), transparent 70%);
   padding-left: 22px;
 }
 
@@ -344,7 +409,7 @@
 }
 
 .work-row:hover .work-title {
-  color: #fcd34d;
+  color: var(--acid);
 }
 
 .work-arrow {
@@ -355,12 +420,13 @@
   place-items: center;
   border: 1px solid var(--border);
   color: #d4d4d4;
-  transition: transform 0.35s ease, background 0.35s ease, color 0.35s ease;
+  transition: transform 0.35s ease, background 0.35s ease, color 0.35s ease, border-color 0.35s ease;
 }
 
 .work-row:hover .work-arrow {
   transform: rotate(45deg);
-  background: #fff;
+  background: var(--acid);
+  border-color: var(--acid);
   color: #000;
 }
 
@@ -424,7 +490,7 @@
   transition: color 0.3s ease;
 }
 
-.work-row:hover .work-index { color: #a1a1a1; }
+.work-row:hover .work-index { color: var(--acid); }
 
 .marquee-track {
   display: flex;

@@ -115,7 +115,7 @@ export default function Members() {
               className="section-title"
             >
               三个人，
-              <em className="serif-accent">三种频率</em>。
+              <em className="stroke-text font-display not-italic">三种频率</em>。
             </motion.h2>
           </div>
           <div className="flex flex-col items-end gap-6">

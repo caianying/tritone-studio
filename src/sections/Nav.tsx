@@ -65,7 +65,7 @@ export default function Nav() {
       {/* 顶部滚动进度条 */}
       <motion.div
         style={{ scaleX: progressScale }}
-        className="h-px origin-left bg-gradient-to-r from-amber-500 via-amber-300 to-transparent"
+        className="h-px origin-left bg-gradient-to-r from-[#d9f24f] via-[#d9f24f]/50 to-transparent"
       />
     </motion.header>
   );

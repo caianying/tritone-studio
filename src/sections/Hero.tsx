@@ -21,6 +21,26 @@ export default function Hero() {
       <HeroWaves scrollYProgress={scrollYProgress} />
       <WaveField3D />
 
+      {/* 贴纸标签 */}
+      <motion.div
+        initial={{ opacity: 0, y: 20, rotate: -10 }}
+        animate={{ opacity: 1, y: 0, rotate: -6 }}
+        transition={{ delay: 1.5, duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+        className="absolute left-[7%] top-[30%] z-[6] hidden lg:block"
+        aria-hidden
+      >
+        <span className="sticker text-[13px]">就现在，整起</span>
+      </motion.div>
+      <motion.div
+        initial={{ opacity: 0, y: 16, rotate: 8 }}
+        animate={{ opacity: 1, y: 0, rotate: 3 }}
+        transition={{ delay: 1.7, duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+        className="absolute left-[12%] top-[40%] z-[6] hidden lg:block"
+        aria-hidden
+      >
+        <span className="sticker-ghost">SHENZHEN — EST. 2021</span>
+      </motion.div>
+
       {/* 幽灵描边字 */}
       <span className="ghost-word" aria-hidden>TRITONE</span>
 
@@ -83,7 +103,7 @@ export default function Hero() {
               transition={{ duration: 1.05, delay: 0.55, ease: [0.16, 1, 0.3, 1] }}
               className="block"
             >
-              <em className="serif-accent text-[1.06em]">整案要加钱</em>。
+              <em className="em-acid text-[1.06em]">整案要加钱</em>。
             </motion.span>
           </span>
         </h1>

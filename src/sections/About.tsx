@@ -100,7 +100,7 @@ export default function About() {
                 <span className="font-mono text-[13px] text-[#525252]">{f.no}</span>
                 <span className="text-[11px] uppercase tracking-[0.14em] text-[#525252]">{f.en}</span>
               </div>
-              <h3 className="mt-8 text-[22px] font-semibold tracking-[-0.02em] text-white transition-colors duration-300 group-hover:text-amber-300">
+              <h3 className="mt-8 text-[22px] font-semibold tracking-[-0.02em] text-white transition-colors duration-300 group-hover:text-[#d9f24f]">
                 {f.title}
               </h3>
               <p className="mt-3 text-[13.5px] leading-[1.75] text-[#8a8a8a]">{f.desc}</p>

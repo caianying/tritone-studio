@@ -10,19 +10,39 @@ const ITEMS = [
 export default function Marquee() {
   const row = [...ITEMS, ...ITEMS];
   return (
-    <div className="relative overflow-hidden border-y border-white/10 py-5" aria-hidden>
+    <div className="relative overflow-hidden border-y border-white/10 py-6" aria-hidden>
       <div className="marquee-track">
         {[0, 1].map((half) => (
-          <div key={half} className="flex shrink-0 items-center gap-16">
-            {row.map(([zh, en], i) => (
-              <span key={`${half}-${i}`} className="flex items-baseline gap-4 whitespace-nowrap">
-                <span className="font-display text-[22px] text-[#e5e5e5]">{zh}</span>
-                <span className="serif-accent text-[15px]">{en}</span>
-                <svg width="10" height="10" viewBox="0 0 10 10" className="ml-8 self-center">
-                  <circle cx="5" cy="5" r="4" fill="none" stroke="#f59e0b" strokeOpacity="0.5" />
-                </svg>
-              </span>
-            ))}
+          <div key={half} className="flex shrink-0 items-center gap-20">
+            {row.map(([zh, en], i) => {
+              const outlined = (i + half) % 2 === 0;
+              return (
+                <span key={`${half}-${i}`} className="flex items-baseline gap-5 whitespace-nowrap">
+                  <span
+                    className={`font-display text-[30px] leading-none ${
+                      outlined ? "stroke-text" : "text-[#e5e5e5]"
+                    }`}
+                  >
+                    {zh}
+                  </span>
+                  <span className={`text-[14px] tracking-[0.18em] ${outlined ? "text-[#6b6b6b]" : "em-acid"}`}>
+                    {en}
+                  </span>
+                  <svg width="12" height="12" viewBox="0 0 12 12" className="ml-10 self-center">
+                    <rect
+                      x="2.2"
+                      y="2.2"
+                      width="7.6"
+                      height="7.6"
+                      fill="none"
+                      stroke="#d9f24f"
+                      strokeOpacity="0.6"
+                      transform="rotate(45 6 6)"
+                    />
+                  </svg>
+                </span>
+              );
+            })}
           </div>
         ))}
       </div>
