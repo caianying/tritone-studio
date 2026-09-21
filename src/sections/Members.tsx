@@ -118,15 +118,27 @@ export default function Members() {
               <em className="serif-accent">三种频率</em>。
             </motion.h2>
           </div>
-          <motion.p
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 1, delay: 0.25 }}
-            className="max-w-[300px] text-[13.5px] leading-[1.75] text-[#8a8a8a]"
-          >
-            制作人、录音师、编曲师 —— 工种不同，耳朵一致。合作多年，一个眼神就能接住彼此的下一个小节。
-          </motion.p>
+          <div className="flex flex-col items-end gap-6">
+            <motion.span
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 1, delay: 0.3 }}
+              className="section-index hidden md:block"
+              aria-hidden
+            >
+              02
+            </motion.span>
+            <motion.p
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 1, delay: 0.25 }}
+              className="max-w-[300px] text-right text-[13.5px] leading-[1.75] text-[#8a8a8a]"
+            >
+              制作人、录音师、编曲师 —— 工种不同，耳朵一致。合作多年，一个眼神就能接住彼此的下一个小节。
+            </motion.p>
+          </div>
         </div>
 
         <div className="mt-16 grid gap-6 md:grid-cols-3">

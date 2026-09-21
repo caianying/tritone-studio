@@ -19,6 +19,34 @@ export default function Hero() {
     >
       <HeroWaves scrollYProgress={scrollYProgress} />
 
+      {/* 幽灵描边字 */}
+      <span className="ghost-word" aria-hidden>TRITONE</span>
+
+      {/* 旋转黑胶装饰 */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.6, duration: 1.2 }}
+        className="absolute right-[7%] top-[24%] z-[5] hidden lg:block"
+        aria-hidden
+      >
+        <motion.div
+          animate={{ rotate: 360 }}
+          transition={{ duration: 14, ease: "linear", repeat: Infinity }}
+          style={{ animation: "float-slow 7s ease-in-out infinite" }}
+        >
+          <svg width="150" height="150" viewBox="0 0 150 150">
+            <circle cx="75" cy="75" r="73" fill="#0a0a0a" stroke="#2a2a2a" strokeWidth="1" />
+            {[64, 56, 48, 40].map((r) => (
+              <circle key={r} cx="75" cy="75" r={r} fill="none" stroke="#1f1f1f" strokeWidth="1" />
+            ))}
+            <circle cx="75" cy="75" r="22" fill="#f59e0b" opacity="0.9" />
+            <circle cx="75" cy="75" r="3.5" fill="#000" />
+            <path d="M75 53 a22 22 0 0 1 19 11" fill="none" stroke="#fff" strokeOpacity="0.25" strokeWidth="2" />
+          </svg>
+        </motion.div>
+      </motion.div>
+
       <motion.div
         style={{ y: copyY, opacity: copyOpacity }}
         className="relative z-10 flex w-full max-w-[880px] flex-col items-center px-6 text-center"

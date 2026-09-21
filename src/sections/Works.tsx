@@ -66,6 +66,7 @@ function WorkRow({ work, index }: { work: Work; index: number }) {
         transition={{ duration: 0.85, delay: (index % 3) * 0.08, ease: [0.16, 1, 0.3, 1] }}
         className="work-row group"
       >
+        <span className="work-index">0{index + 1}</span>
         <motion.div style={{ y: coverY }} className="work-cover">
           <Cover hue={work.hue} seed={work.seed} />
         </motion.div>
@@ -98,22 +99,36 @@ export default function Works() {
     <section id="works" className="section">
       <div className="mx-auto max-w-[1100px]">
         <div ref={headRef}>
-          <motion.span
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-80px" }}
-            transition={{ duration: 0.8 }}
-            className="section-tag"
-          >
-            作品 · SELECTED WORKS
-          </motion.span>
-          <motion.h2
-            style={{ x: headX }}
-            className="section-title whitespace-nowrap"
-          >
-            这些年，
-            <em className="serif-accent">我们留下的声音</em>
-          </motion.h2>
+          <div className="flex items-end justify-between gap-6">
+            <div>
+              <motion.span
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-80px" }}
+                transition={{ duration: 0.8 }}
+                className="section-tag"
+              >
+                作品 · SELECTED WORKS
+              </motion.span>
+              <motion.h2
+                style={{ x: headX }}
+                className="section-title whitespace-nowrap"
+              >
+                这些年，
+                <em className="serif-accent">我们留下的声音</em>
+              </motion.h2>
+            </div>
+            <motion.span
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 1, delay: 0.3 }}
+              className="section-index hidden md:block"
+              aria-hidden
+            >
+              03
+            </motion.span>
+          </div>
         </div>
 
         <div className="mt-16">

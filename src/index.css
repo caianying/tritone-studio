@@ -300,7 +300,7 @@
 .work-row {
   position: relative;
   display: grid;
-  grid-template-columns: 92px 1fr auto;
+  grid-template-columns: 52px 92px 1fr auto;
   align-items: center;
   gap: 24px;
   padding: 30px 10px;
@@ -369,6 +369,62 @@
   background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.18), transparent);
 }
 
+/* 深色滚动条 */
+::-webkit-scrollbar { width: 10px; }
+::-webkit-scrollbar-track { background: #000; }
+::-webkit-scrollbar-thumb {
+  background: #262626;
+  border-radius: 6px;
+  border: 2px solid #000;
+}
+::-webkit-scrollbar-thumb:hover { background: #3d3d3d; }
+
+/* 键盘焦点可见性 */
+:focus-visible {
+  outline: 2px solid rgba(245, 158, 11, 0.7);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* Hero 幽灵描边字 */
+.ghost-word {
+  position: absolute;
+  left: 50%;
+  top: 26%;
+  transform: translate(-50%, -50%);
+  font-family: var(--serif);
+  font-weight: 600;
+  font-size: clamp(90px, 17vw, 260px);
+  letter-spacing: 0.04em;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.07);
+  white-space: nowrap;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* 编辑排版用淡色大序号 */
+.section-index {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: clamp(48px, 7vw, 96px);
+  line-height: 1;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.14);
+  user-select: none;
+}
+
+/* 作品序号 */
+.work-index {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 20px;
+  color: #4a4a4a;
+  transition: color 0.3s ease;
+}
+
+.work-row:hover .work-index { color: #a1a1a1; }
+
 .marquee-track {
   display: flex;
   gap: 64px;
@@ -397,6 +453,8 @@
 @media (max-width: 768px) {
   .section { padding: 90px 5vw; }
   .work-row { grid-template-columns: 64px 1fr; }
+  .work-row .work-index { display: none; }
   .work-row .work-arrow { display: none; }
   .work-cover { width: 64px; height: 64px; }
+  .ghost-word { top: 20%; font-size: 24vw; }
 }

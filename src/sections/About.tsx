@@ -34,15 +34,27 @@ export default function About() {
   return (
     <section ref={ref} id="about" className="section">
       <div className="mx-auto max-w-[1100px]">
-        <motion.span
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.8 }}
-          className="section-tag"
-        >
-          工作室 · ABOUT
-        </motion.span>
+        <div className="flex items-start justify-between gap-6">
+          <motion.span
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.8 }}
+            className="section-tag"
+          >
+            工作室 · ABOUT
+          </motion.span>
+          <motion.span
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 1, delay: 0.3 }}
+            className="section-index hidden md:block"
+            aria-hidden
+          >
+            01
+          </motion.span>
+        </div>
 
         <div className="relative mt-10">
           <motion.h2
