@@ -115,19 +115,9 @@ export default function Works() {
                 className="section-title whitespace-nowrap"
               >
                 这些年，
-                <em className="stroke-text font-display not-italic">我们留下的声音</em>
+                <em className="serif-accent">我们留下的声音</em>
               </motion.h2>
             </div>
-            <motion.span
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 1, delay: 0.3 }}
-              className="section-index hidden md:block"
-              aria-hidden
-            >
-              03
-            </motion.span>
           </div>
         </div>
 

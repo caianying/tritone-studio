@@ -4,8 +4,6 @@ import About from "@/sections/About";
 import Members from "@/sections/Members";
 import Works from "@/sections/Works";
 import Footer from "@/sections/Footer";
-import Marquee from "@/sections/Marquee";
-import { WaveDivider } from "@/components/Waves";
 
 export default function Home() {
   return (
@@ -14,11 +12,8 @@ export default function Home() {
       <Nav />
       <main>
         <Hero />
-        <Marquee />
         <About />
-        <WaveDivider flip />
         <Members />
-        <WaveDivider />
         <Works />
       </main>
       <Footer />

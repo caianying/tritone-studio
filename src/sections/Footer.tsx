@@ -38,7 +38,7 @@ export default function Footer() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-          className="font-display text-center text-[clamp(36px,6vw,72px)] leading-[1.2] text-white"
+          className="text-center text-[clamp(36px,6vw,72px)] font-medium leading-[1.15] tracking-[-0.04em] text-white"
         >
           让下一首歌，
           <br />

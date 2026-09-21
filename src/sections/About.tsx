@@ -34,38 +34,26 @@ export default function About() {
   return (
     <section ref={ref} id="about" className="section">
       <div className="mx-auto max-w-[1100px]">
-        <div className="flex items-start justify-between gap-6">
-          <motion.span
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-80px" }}
-            transition={{ duration: 0.8 }}
-            className="section-tag"
-          >
-            工作室 · ABOUT
-          </motion.span>
-          <motion.span
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 1, delay: 0.3 }}
-            className="section-index hidden md:block"
-            aria-hidden
-          >
-            01
-          </motion.span>
-        </div>
+        <motion.span
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 0.8 }}
+          className="section-tag"
+        >
+          工作室 · ABOUT
+        </motion.span>
 
         <div className="relative mt-10">
           <motion.h2
             style={{ y: yBig }}
-            className="font-display text-[clamp(30px,4.6vw,54px)] leading-[1.3] text-white"
+            className="text-[clamp(30px,4.6vw,54px)] font-medium leading-[1.25] tracking-[-0.03em] text-white"
           >
             三全音，是不协和音程里
             <br />
             最诚实的那一个 ——
             <br />
-            <em className="serif-accent text-[1.05em]"> tension，也是故事的开始。</em>
+            <em className="serif-accent text-[1.05em]">tension，也是故事的开始。</em>
           </motion.h2>
 
           <motion.p
@@ -76,7 +64,7 @@ export default function About() {
             transition={{ duration: 1, delay: 0.2 }}
             className="mt-12 md:ml-auto md:max-w-[460px] md:text-right"
           >
-            <span className="font-display block text-[clamp(24px,3.2vw,38px)] leading-[1.4] text-white">
+            <span className="block text-[clamp(22px,3vw,34px)] font-medium leading-[1.4] tracking-[-0.02em] text-white">
               来自深圳，
               <em className="serif-accent">做音乐的</em>。
             </span>
@@ -94,13 +82,13 @@ export default function About() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-60px" }}
               transition={{ duration: 0.8, delay: i * 0.12 }}
-              className="group bg-[#050505] p-8 transition-colors duration-500 hover:bg-[#0c0a06]"
+              className="group bg-[#050505] p-8 transition-colors duration-500 hover:bg-[#0b0b0b]"
             >
               <div className="flex items-baseline justify-between">
                 <span className="font-mono text-[13px] text-[#525252]">{f.no}</span>
                 <span className="text-[11px] uppercase tracking-[0.14em] text-[#525252]">{f.en}</span>
               </div>
-              <h3 className="mt-8 text-[22px] font-semibold tracking-[-0.02em] text-white transition-colors duration-300 group-hover:text-[#d9f24f]">
+              <h3 className="mt-8 text-[22px] font-semibold tracking-[-0.02em] text-white transition-colors duration-300 group-hover:text-white">
                 {f.title}
               </h3>
               <p className="mt-3 text-[13.5px] leading-[1.75] text-[#8a8a8a]">{f.desc}</p>

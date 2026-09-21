@@ -73,7 +73,7 @@ function ParallaxCard({
             {member.chip}
           </span>
           <div className="mt-3 flex items-baseline gap-2">
-            <h3 className="font-display text-[24px] text-white">{member.name}</h3>
+            <h3 className="text-[24px] font-semibold tracking-[-0.02em] text-white">{member.name}</h3>
             <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-[#8a8a8a]">{member.en}</span>
           </div>
           <p className="mt-1 text-[13px] text-[#b5b5b5]">{member.role}</p>
@@ -115,20 +115,10 @@ export default function Members() {
               className="section-title"
             >
               一支团队，
-              <em className="stroke-text font-display not-italic">各有频率</em>。
+              <em className="serif-accent">各有频率</em>。
             </motion.h2>
           </div>
           <div className="flex flex-col items-end gap-6">
-            <motion.span
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 1, delay: 0.3 }}
-              className="section-index hidden md:block"
-              aria-hidden
-            >
-              02
-            </motion.span>
             <motion.p
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
