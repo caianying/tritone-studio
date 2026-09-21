@@ -35,7 +35,7 @@ export default function Hero() {
           独立音乐工作室 · EST. 2021 · 深圳
         </motion.span>
 
-        <h1 className="mt-7 text-[clamp(42px,7.5vw,86px)] font-medium leading-[1.12] tracking-[-0.045em] text-white">
+        <h1 className="font-display mt-7 text-[clamp(42px,7.5vw,86px)] leading-[1.14] text-white">
           <span className="block overflow-hidden">
             <motion.span
               initial={{ y: "110%" }}

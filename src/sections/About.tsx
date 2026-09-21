@@ -47,7 +47,7 @@ export default function About() {
         <div className="relative mt-10">
           <motion.h2
             style={{ y: yBig }}
-            className="text-[clamp(30px,4.6vw,54px)] font-medium leading-[1.25] tracking-[-0.03em] text-white"
+            className="font-display text-[clamp(30px,4.6vw,54px)] leading-[1.3] text-white"
           >
             三全音，是不协和音程里
             <br />

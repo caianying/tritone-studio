@@ -73,7 +73,7 @@ function ParallaxCard({
             {member.chip}
           </span>
           <div className="mt-3 flex items-baseline gap-2">
-            <h3 className="text-[24px] font-semibold tracking-[-0.02em] text-white">{member.name}</h3>
+            <h3 className="font-display text-[24px] text-white">{member.name}</h3>
             <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-[#8a8a8a]">{member.en}</span>
           </div>
           <p className="mt-1 text-[13px] text-[#b5b5b5]">{member.role}</p>
