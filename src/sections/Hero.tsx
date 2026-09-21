@@ -103,7 +103,7 @@ export default function Hero() {
               transition={{ duration: 1.05, delay: 0.55, ease: [0.16, 1, 0.3, 1] }}
               className="block"
             >
-              <em className="em-acid text-[1.06em]">整案要加钱</em>。
+              <em className="em-acid text-[1.06em]">全案要加钱</em>。
             </motion.span>
           </span>
         </h1>
