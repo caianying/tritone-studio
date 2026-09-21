@@ -132,22 +132,6 @@ export default function Hero() {
           <a href="#contact" className="btn btn-ghost">整起</a>
         </motion.div>
       </motion.div>
-
-      {/* 滚动提示 */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.8, duration: 1 }}
-        style={{ opacity: copyOpacity }}
-        className="absolute bottom-6 left-1/2 z-10 -translate-x-1/2 text-[11px] tracking-[0.3em] text-[#6b6b6b]"
-      >
-        SCROLL
-        <motion.div
-          animate={{ y: [0, 6, 0] }}
-          transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
-          className="mx-auto mt-2 h-8 w-px bg-gradient-to-b from-[#6b6b6b] to-transparent"
-        />
-      </motion.div>
     </section>
   );
 }
