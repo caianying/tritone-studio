@@ -74,9 +74,15 @@ export default function About() {
             whileInView={{ opacity: 1 }}
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 1, delay: 0.2 }}
-            className="mt-8 max-w-[440px] text-[15px] leading-[1.8] text-[#9a9a9a] md:ml-auto"
+            className="mt-12 md:ml-auto md:max-w-[460px] md:text-right"
           >
-            来自深圳，做音乐的。
+            <span className="font-display block text-[clamp(24px,3.2vw,38px)] leading-[1.4] text-white">
+              来自深圳，
+              <em className="serif-accent">做音乐的</em>。
+            </span>
+            <span className="mt-4 block text-[11px] uppercase tracking-[0.4em] text-[#6b6b6b]">
+              Shenzhen — Music Makers
+            </span>
           </motion.p>
         </div>
 
