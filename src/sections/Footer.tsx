@@ -82,7 +82,7 @@ export default function Footer() {
             </svg>
             TRITONE · 三全音音乐工作室
           </div>
-          <div>中国 · 汕头 —— 也接远程单</div>
+          <div>中国 · 深圳 —— 也接远程单</div>
           <div>© 2026 TRITONE Studio. All frequencies reserved.</div>
         </div>
       </div>

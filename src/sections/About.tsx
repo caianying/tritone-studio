@@ -64,8 +64,8 @@ export default function About() {
             transition={{ duration: 1, delay: 0.2 }}
             className="mt-8 max-w-[440px] text-[15px] leading-[1.8] text-[#9a9a9a] md:ml-auto"
           >
-            TRITONE 成立于 2021 年，扎根汕头。我们相信小团队的锋利：没有流水线，
-            只有三个把音乐当饭吃的人。每一首交出去的作品，都必须先过我们自己的耳朵。
+            我们是三个在深圳做音乐的人，2021 年凑了一间工作室。写歌、录音、混音都自己来，
+            不接急活，也不糊弄。每一首作品交出去之前，都得先过我们自己这一关。
           </motion.p>
         </div>
 

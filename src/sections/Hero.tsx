@@ -32,7 +32,7 @@ export default function Hero() {
           <svg width="14" height="14" viewBox="0 0 24 24" fill="#f59e0b">
             <path d="M12 2c.6 0 .9.6 1.1 2.1.6 4.7 1.5 5.6 6.2 6.2 1.5.2 2 .5 2 1.1s-.5.9-2 1.1c-4.7.6-5.6 1.5-6.2 6.2-.2 1.5-.5 2.1-1.1 2.1s-.9-.6-1.1-2.1c-.6-4.7-1.5-5.6-6.2-6.2C3.5 13.9 3 13.6 3 13s.5-.9 2-1.1c4.7-.6 5.6-1.5 6.2-6.2C11.1 2.6 11.4 2 12 2Z" />
           </svg>
-          独立音乐工作室 · EST. 2021 · 汕头
+          独立音乐工作室 · EST. 2021 · 深圳
         </motion.span>
 
         <h1 className="mt-7 text-[clamp(42px,7.5vw,86px)] font-medium leading-[1.12] tracking-[-0.045em] text-white">
