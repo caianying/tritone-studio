@@ -1,10 +1,9 @@
 import { useEffect } from "react";
 
 /**
- * 智能整屏翻页：
- * - 不拦截滚轮 —— section 内部始终可以正常滚动浏览内容
- * - 向下滚到当前 section 底部边缘 → 吸附到下一个 section 顶
- * - 向上滚到当前 section 顶部边缘 → 吸附到上一个 section 顶
+ * 智能整屏翻页（不拦截滚轮，section 内自由浏览）：
+ * - 只有当滚动「越过」当前 section 边界时才吸附纠正：
+ *   向下滚过底部 / 向上滚过顶部 → 平滑滚到相邻 section
  * - 任意位置“猛划”（单次滚动量 ≥ FLICK）→ 直接切换 section
  * - 触控（pointer: coarse）不启用，由 CSS scroll-snap(proximity) 轻柔吸附
  */
@@ -13,9 +12,9 @@ export function useSectionSnap() {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     if (window.matchMedia("(pointer: coarse)").matches) return;
 
-    const FLICK = 130; // 单次猛划阈值（px），普通滚轮一格约 100
-    const EDGE = 64; // 顶部 / 底部边缘判定区（px）
-    const COOLDOWN = 850;
+    const FLICK = 160; // 单次猛划阈值（px），普通滚轮一格约 100
+    const OVERSHOOT = 10; // 越过边界多少 px 才吸附纠正
+    const COOLDOWN = 800;
 
     const sections = () =>
       Array.from(document.querySelectorAll<HTMLElement>("[data-snap]"));
@@ -34,20 +33,23 @@ export function useSectionSnap() {
       const dir = e.deltaY > 0 ? 1 : -1;
       const flick = Math.abs(e.deltaY) >= FLICK;
 
-      // 当前所在 section（offsetTop 小于等于当前滚动位置的最后一块）
+      // 当前 section：以视口上 35% 处的锚点定位（越界瞬间锚点仍在原 section）
+      const anchor = pos + vh * 0.35;
       let cur = 0;
       list.forEach((s, i) => {
-        if (s.offsetTop <= pos + 8) cur = i;
+        if (s.offsetTop <= anchor) cur = i;
       });
       const sec = list[cur];
+      const top = sec.offsetTop;
+      const bottom = sec.offsetTop + sec.offsetHeight;
 
       let target = -1;
       if (dir > 0) {
-        const atEnd = sec.offsetTop + sec.offsetHeight - pos - vh < EDGE;
-        if (flick || atEnd) target = Math.min(cur + 1, list.length - 1);
+        const overshoot = pos + vh - bottom; // 视口底部越出 section 底部
+        if (flick || overshoot > OVERSHOOT) target = Math.min(cur + 1, list.length - 1);
       } else {
-        const atTop = pos - sec.offsetTop < EDGE;
-        if (flick || atTop) target = Math.max(cur - 1, 0);
+        const overshoot = top - pos; // 视口顶部滚过 section 顶部
+        if (flick || overshoot > OVERSHOOT) target = Math.max(cur - 1, 0);
       }
 
       if (target < 0 || target === cur) return;

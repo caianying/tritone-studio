@@ -31,14 +31,14 @@ export function SilkField() {
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.8));
     renderer.setSize(mount.clientWidth, mount.clientHeight);
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.18;
+    renderer.toneMappingExposure = 1.25;
     mount.appendChild(renderer.domElement);
 
     const scene = new THREE.Scene();
     scene.fog = new THREE.Fog(0x000000, 9, 26);
 
-    const camera = new THREE.PerspectiveCamera(50, mount.clientWidth / mount.clientHeight, 0.1, 60);
-    camera.position.set(0, 0, 11.8);
+    const camera = new THREE.PerspectiveCamera(54, mount.clientWidth / mount.clientHeight, 0.1, 60);
+    camera.position.set(0, 0, 10.5);
     camera.lookAt(0, 0.9, 0);
 
     const group = new THREE.Group();
@@ -102,7 +102,7 @@ export function SilkField() {
     };
 
     const ribbons: RibbonCfg[] = [
-      makeRibbon(34, 6.8, 200, 64, 0xcfcfcf, 0, -0.42, 0, 1, 1, 1.55),
+      makeRibbon(34, 8, 200, 64, 0xcfcfcf, 0, -0.42, 0, 1, 1, 1.85),
       makeRibbon(40, 9, 120, 40, 0x6b6b6b, -4.5, -0.3, 4.2, 0.62, 0.72, 1.9),
     ];
 
@@ -132,25 +132,36 @@ export function SilkField() {
     const dustFar = makeDust(900, 0.028, 0.28, [34, 18, 10]);
     const dustBokeh = makeDust(60, 0.22, 0.05, [26, 14, 6]);
 
-    // ---- 灯光：主光（暖白，左上前方）+ 轮廓光（冷白，右后方） ----
-    const key = new THREE.DirectionalLight(0xfff6ea, 2.6);
+    // ---- 灯光：主光（暖白，左上前方）+ 轮廓光（冷白，右后方）+ 扫动追光 ----
+    const key = new THREE.DirectionalLight(0xfff6ea, 3.0);
     key.position.set(5, 7, 8);
     scene.add(key);
-    const rim = new THREE.DirectionalLight(0xdfe8ff, 1.2);
+    const rim = new THREE.DirectionalLight(0xdfe8ff, 1.5);
     rim.position.set(-7, -3, -6);
     scene.add(rim);
-    scene.add(new THREE.AmbientLight(0x404040, 0.3));
+    scene.add(new THREE.AmbientLight(0x404040, 0.22));
+    // 追光：缓慢来回扫过缎带，制造流动的高光带
+    const spot = new THREE.PointLight(0xffffff, 60, 40, 1.8);
+    spot.position.set(0, 3, 4);
+    scene.add(spot);
 
-    // 鼠标轻微视差 + 缎带“顶起”交互
+    // 鼠标轻微视差 + 缎带“顶起”交互 + 点击涟漪
     let mx = 0;
     let my = 0;
     let pushX = 0; // 平滑后的鼠标世界坐标
+    const ripples: { x: number; t0: number }[] = [];
     const onPointer = (e: PointerEvent) => {
       const r = mount.getBoundingClientRect();
       mx = ((e.clientX - r.left) / r.width - 0.5) * 2;
       my = ((e.clientY - r.top) / r.height - 0.5) * 2;
     };
+    const onPointerDown = (e: PointerEvent) => {
+      const r = mount.getBoundingClientRect();
+      ripples.push({ x: ((e.clientX - r.left) / r.width - 0.5) * 2 * 9, t0: clock.getElapsedTime() });
+      if (ripples.length > 6) ripples.shift();
+    };
     window.addEventListener("pointermove", onPointer, { passive: true });
+    window.addEventListener("pointerdown", onPointerDown, { passive: true });
 
     // 滚动联动：离开首屏时场景下沉并向后倾倒，营造 3D 纵深离场
     let scrollP = 0;
@@ -174,8 +185,17 @@ export function SilkField() {
     const step = (t: number) => {
       // 鼠标位置平滑映射到世界坐标，用于“顶起”缎带
       pushX += (mx * 9 - pushX) * 0.06;
+      // 追光缓慢扫动
+      spot.position.x = Math.sin(t * 0.24) * 9;
+      spot.position.y = 2.5 + Math.sin(t * 0.17) * 1.5;
 
-      // 缎带顶点：沿带宽做包络 taper，端头收成柔软轮廓；鼠标附近额外隆起
+      // 清理过期涟漪（3 秒寿命）
+      for (let i = ripples.length - 1; i >= 0; i--) {
+        if (t - ripples[i].t0 > 3) ripples.splice(i, 1);
+      }
+
+      // 缎带顶点：沿带宽做包络 taper，端头收成柔软轮廓；
+      // 鼠标附近隆起、点击激起向外扩散的丝绸涟漪
       for (const r of ribbons) {
         const tt = t * r.timeScale + r.phase;
         const arr = r.posAttr.array as Float32Array;
@@ -185,7 +205,14 @@ export function SilkField() {
           const env = Math.cos((y / r.vHalf) * Math.PI * 0.5) ** 2; // 1 → 0
           const ampMod = 0.62 + 0.38 * Math.sin(x * 0.21 + tt * 0.28);
           const dx = x - pushX;
-          const push = 1.1 * Math.exp(-(dx * dx) / 7);
+          const push = 1.6 * Math.exp(-(dx * dx) / 5);
+          let ripple = 0;
+          for (const rp of ripples) {
+            const age = t - rp.t0;
+            const d = x - rp.x;
+            ripple +=
+              Math.sin(d * 1.6 - age * 7) * Math.exp(-(d * d) / 9) * Math.exp(-age * 1.7) * 1.5;
+          }
           arr[i + 2] =
             env *
             ampMod *
@@ -193,7 +220,8 @@ export function SilkField() {
             (1.25 * Math.sin(x * 0.4 + tt * 0.85) +
               0.7 * Math.sin(x * 0.93 - tt * 0.55 + 2.1) +
               0.42 * Math.sin(x * 1.72 + tt * 1.25 + y * 0.7) +
-              push);
+              push +
+              ripple);
           arr[i + 1] = y + env * 0.35 * Math.sin(x * 0.5 + tt * 0.62);
         }
         r.posAttr.needsUpdate = true;
@@ -231,6 +259,7 @@ export function SilkField() {
     return () => {
       cancelAnimationFrame(raf);
       window.removeEventListener("pointermove", onPointer);
+      window.removeEventListener("pointerdown", onPointerDown);
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onResize);
       for (const r of ribbons) {
