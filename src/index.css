@@ -530,3 +530,9 @@ body.menu-open .mobile-menu {
   .work-row .work-arrow { display: none; }
   .work-cover { width: 64px; height: 64px; }
 }
+
+/* 移动端触控：轻柔吸附到区块（桌面端由 useSectionSnap 接管滚轮） */
+@media (pointer: coarse) {
+  html { scroll-snap-type: y proximity; }
+  [data-snap] { scroll-snap-align: start; }
+}

@@ -32,7 +32,7 @@ export default function About() {
   const ySmall = useTransform(scrollYProgress, [0, 1], [30, -110]);
 
   return (
-    <section ref={ref} id="about" className="section">
+    <section ref={ref} id="about" data-snap className="section">
       <div className="mx-auto max-w-[1100px]">
         <motion.span
           initial={{ opacity: 0, y: 16 }}

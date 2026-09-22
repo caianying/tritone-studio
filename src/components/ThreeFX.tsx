@@ -1,10 +1,23 @@
 import { useEffect, useRef } from "react";
 import * as THREE from "three";
 
+type RibbonCfg = {
+  geo: THREE.PlaneGeometry;
+  mat: THREE.MeshStandardMaterial;
+  base: Float32Array;
+  posAttr: THREE.BufferAttribute;
+  vHalf: number;
+  phase: number;
+  timeScale: number;
+  freqScale: number;
+  ampScale: number;
+};
+
 /**
- * Hero 液态银丝背景：黑色空间中一条缓慢流动的白色丝绸缎带，
- * 顶点噪声位移 + 实时法线，配合冷暖双灯打出柔软的高光与阴影；
- * 外加两层漂浮的白色尘埃粒子，营造纵深。
+ * Hero 液态银丝背景：一主一辅两条白色丝绸缎带在黑色空间中缓缓流动
+ * （顶点噪声位移 + 实时法线），暖白主光 + 冷白轮廓光打出柔软高光；
+ * 三层尘埃粒子（近层亮尘 / 远层暗尘 / 大颗粒焦外光斑）营造纵深，
+ * 鼠标移动时整个场景轻微视差倾斜。
  */
 export function SilkField() {
   const mountRef = useRef<HTMLDivElement>(null);
@@ -20,7 +33,7 @@ export function SilkField() {
     mount.appendChild(renderer.domElement);
 
     const scene = new THREE.Scene();
-    scene.fog = new THREE.Fog(0x000000, 9, 24);
+    scene.fog = new THREE.Fog(0x000000, 9, 26);
 
     const camera = new THREE.PerspectiveCamera(46, mount.clientWidth / mount.clientHeight, 0.1, 60);
     camera.position.set(0, 0.2, 13.5);
@@ -30,11 +43,6 @@ export function SilkField() {
     group.position.y = 1.6; // 缎带居上，让出底部文案区
     scene.add(group);
 
-    // ---- 丝绸缎带 ----
-    const SEG_X = 200;
-    const SEG_Y = 64;
-    const W = 32;
-    const H = 5.2;
     // 纵向透明渐变：让缎带上下边缘雾化消失，形成柔软轮廓
     const fadeCanvas = document.createElement("canvas");
     fadeCanvas.width = 2;
@@ -49,24 +57,53 @@ export function SilkField() {
     fctx.fillRect(0, 0, 2, 256);
     const fadeTex = new THREE.CanvasTexture(fadeCanvas);
 
-    const ribbonGeo = new THREE.PlaneGeometry(W, H, SEG_X, SEG_Y);
-    const ribbonMat = new THREE.MeshStandardMaterial({
-      color: 0xbdbdbd,
-      roughness: 0.48,
-      metalness: 0.3,
-      side: THREE.DoubleSide,
-      transparent: true,
-      alphaMap: fadeTex,
-      depthWrite: false,
-    });
-    const ribbon = new THREE.Mesh(ribbonGeo, ribbonMat);
-    ribbon.rotation.x = -0.42; // 略微后仰，露出缎面
-    group.add(ribbon);
+    // ---- 两条缎带：前景主带 + 后景辅带（更远、更暗、相位不同） ----
+    const makeRibbon = (
+      w: number,
+      h: number,
+      segX: number,
+      segY: number,
+      color: number,
+      z: number,
+      rotX: number,
+      phase: number,
+      timeScale: number,
+      freqScale: number,
+      ampScale: number
+    ): RibbonCfg => {
+      const geo = new THREE.PlaneGeometry(w, h, segX, segY);
+      const mat = new THREE.MeshStandardMaterial({
+        color,
+        roughness: 0.48,
+        metalness: 0.3,
+        side: THREE.DoubleSide,
+        transparent: true,
+        alphaMap: fadeTex,
+        depthWrite: false,
+      });
+      const mesh = new THREE.Mesh(geo, mat);
+      mesh.rotation.x = rotX;
+      mesh.position.z = z;
+      group.add(mesh);
+      return {
+        geo,
+        mat,
+        base: (geo.attributes.position as THREE.BufferAttribute).array.slice() as Float32Array,
+        posAttr: geo.attributes.position as THREE.BufferAttribute,
+        vHalf: h / 2,
+        phase,
+        timeScale,
+        freqScale,
+        ampScale,
+      };
+    };
 
-    const basePos = (ribbonGeo.attributes.position as THREE.BufferAttribute).array.slice() as Float32Array;
-    const posAttr = ribbonGeo.attributes.position as THREE.BufferAttribute;
+    const ribbons: RibbonCfg[] = [
+      makeRibbon(32, 5.2, 200, 64, 0xbdbdbd, 0, -0.42, 0, 1, 1, 1),
+      makeRibbon(38, 7.5, 120, 40, 0x767676, -4.5, -0.3, 4.2, 0.62, 0.72, 1.5),
+    ];
 
-    // ---- 尘埃粒子（近层亮、远层暗） ----
+    // ---- 尘埃粒子（近层亮尘 / 远层暗尘 / 焦外大光斑） ----
     const makeDust = (n: number, size: number, opacity: number, spread: [number, number, number]) => {
       const arr = new Float32Array(n * 3);
       for (let i = 0; i < n; i++) {
@@ -86,10 +123,11 @@ export function SilkField() {
       });
       const pts = new THREE.Points(g, m);
       scene.add(pts);
-      return { geo: g, mat: m, pts, base: arr.slice() as Float32Array, n };
+      return { geo: g, mat: m, base: arr.slice() as Float32Array, n };
     };
     const dustNear = makeDust(500, 0.05, 0.5, [30, 16, 8]);
     const dustFar = makeDust(900, 0.028, 0.28, [34, 18, 10]);
+    const dustBokeh = makeDust(60, 0.22, 0.05, [26, 14, 6]);
 
     // ---- 灯光：主光（暖白，左上前方）+ 轮廓光（冷白，右后方） ----
     const key = new THREE.DirectionalLight(0xfff6ea, 2.0);
@@ -119,31 +157,34 @@ export function SilkField() {
     };
     window.addEventListener("resize", onResize);
 
-    const vHalf = H / 2;
     let raf = 0;
     const clock = new THREE.Clock();
 
     const step = (t: number) => {
       // 缎带顶点：沿带宽做包络 taper，端头收成柔软轮廓
-      const arr = posAttr.array as Float32Array;
-      for (let i = 0; i < arr.length; i += 3) {
-        const x = basePos[i];
-        const y = basePos[i + 1];
-        const env = Math.cos((y / vHalf) * Math.PI * 0.5) ** 2; // 1 → 0
-        const ampMod = 0.62 + 0.38 * Math.sin(x * 0.21 + t * 0.28);
-        arr[i + 2] =
-          env *
-          ampMod *
-          (1.25 * Math.sin(x * 0.4 + t * 0.85) +
-            0.7 * Math.sin(x * 0.93 - t * 0.55 + 2.1) +
-            0.42 * Math.sin(x * 1.72 + t * 1.25 + y * 0.7));
-        arr[i + 1] = y + env * 0.35 * Math.sin(x * 0.5 + t * 0.62);
+      for (const r of ribbons) {
+        const tt = t * r.timeScale + r.phase;
+        const arr = r.posAttr.array as Float32Array;
+        for (let i = 0; i < arr.length; i += 3) {
+          const x = r.base[i] * r.freqScale;
+          const y = r.base[i + 1];
+          const env = Math.cos((y / r.vHalf) * Math.PI * 0.5) ** 2; // 1 → 0
+          const ampMod = 0.62 + 0.38 * Math.sin(x * 0.21 + tt * 0.28);
+          arr[i + 2] =
+            env *
+            ampMod *
+            r.ampScale *
+            (1.25 * Math.sin(x * 0.4 + tt * 0.85) +
+              0.7 * Math.sin(x * 0.93 - tt * 0.55 + 2.1) +
+              0.42 * Math.sin(x * 1.72 + tt * 1.25 + y * 0.7));
+          arr[i + 1] = y + env * 0.35 * Math.sin(x * 0.5 + tt * 0.62);
+        }
+        r.posAttr.needsUpdate = true;
+        r.geo.computeVertexNormals();
       }
-      posAttr.needsUpdate = true;
-      ribbonGeo.computeVertexNormals();
 
       // 尘埃缓慢上浮 + 横向漂摆
-      for (const d of [dustNear, dustFar]) {
+      for (const d of [dustNear, dustFar, dustBokeh]) {
         const p = d.geo.attributes.position as THREE.BufferAttribute;
         for (let i = 0; i < d.n; i++) {
           const i3 = i * 3;
@@ -155,6 +196,7 @@ export function SilkField() {
 
       group.rotation.y += (mx * 0.1 - group.rotation.y) * 0.035;
       group.rotation.x += (my * 0.05 - group.rotation.x) * 0.035;
+      group.rotation.z = Math.sin(t * 0.07) * 0.02; // 极缓慢的呼吸摇摆
       renderer.render(scene, camera);
     };
 
@@ -172,13 +214,15 @@ export function SilkField() {
       cancelAnimationFrame(raf);
       window.removeEventListener("pointermove", onPointer);
       window.removeEventListener("resize", onResize);
-      ribbonGeo.dispose();
-      ribbonMat.dispose();
+      for (const r of ribbons) {
+        r.geo.dispose();
+        r.mat.dispose();
+      }
       fadeTex.dispose();
-      dustNear.geo.dispose();
-      dustNear.mat.dispose();
-      dustFar.geo.dispose();
-      dustFar.mat.dispose();
+      for (const d of [dustNear, dustFar, dustBokeh]) {
+        d.geo.dispose();
+        d.mat.dispose();
+      }
       renderer.dispose();
       mount.removeChild(renderer.domElement);
     };
@@ -188,7 +232,7 @@ export function SilkField() {
 }
 
 /**
- * 页脚漂浮尘埃粒子：缓慢上升的微尘，琥珀与暖白双色，微弱发光。
+ * 页脚漂浮尘埃粒子：缓慢上升的微尘，白与暖灰双色，微弱发光。
  */
 export function DustParticles() {
   const mountRef = useRef<HTMLDivElement>(null);
@@ -211,8 +255,8 @@ export function DustParticles() {
     const positions = new Float32Array(N * 3);
     const speeds = new Float32Array(N);
     const colors = new Float32Array(N * 3);
-    const cAmber = new THREE.Color("#f59e0b");
-    const cWarm = new THREE.Color("#e8e0d0");
+    const cWhite = new THREE.Color("#ffffff");
+    const cWarm = new THREE.Color("#cfcfcf");
     const tmp = new THREE.Color();
 
     for (let i = 0; i < N; i++) {
@@ -220,7 +264,7 @@ export function DustParticles() {
       positions[i * 3 + 1] = (Math.random() - 0.5) * 16;
       positions[i * 3 + 2] = (Math.random() - 0.5) * 8;
       speeds[i] = 0.15 + Math.random() * 0.45;
-      tmp.copy(Math.random() > 0.35 ? cAmber : cWarm);
+      tmp.copy(Math.random() > 0.35 ? cWhite : cWarm);
       colors[i * 3] = tmp.r;
       colors[i * 3 + 1] = tmp.g;
       colors[i * 3 + 2] = tmp.b;

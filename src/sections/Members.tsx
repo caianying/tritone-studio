@@ -94,7 +94,7 @@ export default function Members() {
   });
 
   return (
-    <section ref={ref} id="members" className="section overflow-hidden">
+    <section ref={ref} id="members" data-snap className="section overflow-hidden">
       <div className="mx-auto max-w-[1100px]">
         <div className="flex flex-wrap items-end justify-between gap-6">
           <div>

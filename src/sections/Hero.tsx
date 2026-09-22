@@ -47,6 +47,7 @@ export default function Hero() {
     <section
       ref={ref}
       id="top"
+      data-snap
       className="relative grid min-h-[100svh] grid-rows-[1fr_auto] overflow-hidden"
     >
       <SilkField />

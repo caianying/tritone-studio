@@ -96,7 +96,7 @@ export default function Works() {
   const headX: MotionValue<number> = useTransform(scrollYProgress, [0, 1], [40, -40]);
 
   return (
-    <section id="works" className="section">
+    <section id="works" data-snap className="section">
       <div className="mx-auto max-w-[1100px]">
         <div ref={headRef}>
           <div className="flex items-end justify-between gap-6">

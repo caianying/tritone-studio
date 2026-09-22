@@ -18,7 +18,7 @@ export default function Footer() {
   const glowOpacity = useTransform(scrollYProgress, [0, 1], [0, 1]);
 
   return (
-    <footer ref={ref} id="contact" className="relative overflow-hidden">
+    <footer ref={ref} id="contact" data-snap className="relative overflow-hidden">
       {/* 底部琥珀光晕 + 尘埃粒子 */}
       <DustParticles />
       <motion.div
@@ -28,7 +28,7 @@ export default function Footer() {
       >
         <div
           className="h-full w-full rounded-full"
-          style={{ background: "radial-gradient(circle, rgba(245,158,11,0.22) 0%, rgba(180,83,9,0.08) 45%, transparent 70%)" }}
+          style={{ background: "radial-gradient(circle, rgba(255,255,255,0.14) 0%, rgba(200,200,200,0.05) 45%, transparent 70%)" }}
         />
       </motion.div>
 
@@ -79,7 +79,7 @@ export default function Footer() {
 
         <div className="mt-16 flex flex-col items-center justify-between gap-4 border-t border-white/10 pt-8 text-[12px] text-[#6b6b6b] md:flex-row">
           <div className="flex items-center gap-2">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" className="text-amber-400">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" className="text-white/80">
               <path d="M12 3v10.55A4 4 0 1 0 14 17V7h4V3h-6z" />
             </svg>
             TRITONE · 三全音音乐工作室
