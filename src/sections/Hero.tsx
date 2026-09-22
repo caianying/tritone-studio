@@ -1,6 +1,6 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
-import { WaveField3D } from "@/components/ThreeFX";
+import { SilkField } from "@/components/ThreeFX";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 
@@ -49,7 +49,17 @@ export default function Hero() {
       id="top"
       className="relative grid min-h-[100svh] grid-rows-[1fr_auto] overflow-hidden"
     >
-      <WaveField3D />
+      <SilkField />
+
+      {/* 上下压暗渐变：保证导航与底部文案可读 */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 top-0 z-[5] h-28 bg-gradient-to-b from-black/80 to-transparent"
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 bottom-0 z-[5] h-[52%] bg-gradient-to-t from-black via-black/55 to-transparent"
+      />
 
       <motion.div
         style={{ y: copyY, opacity: copyOpacity }}
