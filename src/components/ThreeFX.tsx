@@ -30,17 +30,20 @@ export function SilkField() {
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.8));
     renderer.setSize(mount.clientWidth, mount.clientHeight);
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.18;
     mount.appendChild(renderer.domElement);
 
     const scene = new THREE.Scene();
     scene.fog = new THREE.Fog(0x000000, 9, 26);
 
-    const camera = new THREE.PerspectiveCamera(46, mount.clientWidth / mount.clientHeight, 0.1, 60);
-    camera.position.set(0, 0.2, 13.5);
-    camera.lookAt(0, 1.0, 0);
+    const camera = new THREE.PerspectiveCamera(50, mount.clientWidth / mount.clientHeight, 0.1, 60);
+    camera.position.set(0, 0, 11.8);
+    camera.lookAt(0, 0.9, 0);
 
     const group = new THREE.Group();
-    group.position.y = 1.6; // 缎带居上，让出底部文案区
+    const GROUP_Y = 1.15; // 缎带居上，让出底部文案区
+    group.position.y = GROUP_Y;
     scene.add(group);
 
     // 纵向透明渐变：让缎带上下边缘雾化消失，形成柔软轮廓
@@ -99,8 +102,8 @@ export function SilkField() {
     };
 
     const ribbons: RibbonCfg[] = [
-      makeRibbon(32, 5.2, 200, 64, 0xbdbdbd, 0, -0.42, 0, 1, 1, 1),
-      makeRibbon(38, 7.5, 120, 40, 0x767676, -4.5, -0.3, 4.2, 0.62, 0.72, 1.5),
+      makeRibbon(34, 6.8, 200, 64, 0xcfcfcf, 0, -0.42, 0, 1, 1, 1.55),
+      makeRibbon(40, 9, 120, 40, 0x6b6b6b, -4.5, -0.3, 4.2, 0.62, 0.72, 1.9),
     ];
 
     // ---- 尘埃粒子（近层亮尘 / 远层暗尘 / 焦外大光斑） ----
@@ -130,23 +133,31 @@ export function SilkField() {
     const dustBokeh = makeDust(60, 0.22, 0.05, [26, 14, 6]);
 
     // ---- 灯光：主光（暖白，左上前方）+ 轮廓光（冷白，右后方） ----
-    const key = new THREE.DirectionalLight(0xfff6ea, 2.0);
+    const key = new THREE.DirectionalLight(0xfff6ea, 2.6);
     key.position.set(5, 7, 8);
     scene.add(key);
-    const rim = new THREE.DirectionalLight(0xdfe8ff, 0.9);
+    const rim = new THREE.DirectionalLight(0xdfe8ff, 1.2);
     rim.position.set(-7, -3, -6);
     scene.add(rim);
-    scene.add(new THREE.AmbientLight(0x404040, 0.35));
+    scene.add(new THREE.AmbientLight(0x404040, 0.3));
 
-    // 鼠标轻微视差
+    // 鼠标轻微视差 + 缎带“顶起”交互
     let mx = 0;
     let my = 0;
+    let pushX = 0; // 平滑后的鼠标世界坐标
     const onPointer = (e: PointerEvent) => {
       const r = mount.getBoundingClientRect();
       mx = ((e.clientX - r.left) / r.width - 0.5) * 2;
       my = ((e.clientY - r.top) / r.height - 0.5) * 2;
     };
     window.addEventListener("pointermove", onPointer, { passive: true });
+
+    // 滚动联动：离开首屏时场景下沉并向后倾倒，营造 3D 纵深离场
+    let scrollP = 0;
+    const onScroll = () => {
+      scrollP = Math.min(Math.max(window.scrollY / window.innerHeight, 0), 1);
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
 
     const onResize = () => {
       const w = mount.clientWidth;
@@ -161,7 +172,10 @@ export function SilkField() {
     const clock = new THREE.Clock();
 
     const step = (t: number) => {
-      // 缎带顶点：沿带宽做包络 taper，端头收成柔软轮廓
+      // 鼠标位置平滑映射到世界坐标，用于“顶起”缎带
+      pushX += (mx * 9 - pushX) * 0.06;
+
+      // 缎带顶点：沿带宽做包络 taper，端头收成柔软轮廓；鼠标附近额外隆起
       for (const r of ribbons) {
         const tt = t * r.timeScale + r.phase;
         const arr = r.posAttr.array as Float32Array;
@@ -170,13 +184,16 @@ export function SilkField() {
           const y = r.base[i + 1];
           const env = Math.cos((y / r.vHalf) * Math.PI * 0.5) ** 2; // 1 → 0
           const ampMod = 0.62 + 0.38 * Math.sin(x * 0.21 + tt * 0.28);
+          const dx = x - pushX;
+          const push = 1.1 * Math.exp(-(dx * dx) / 7);
           arr[i + 2] =
             env *
             ampMod *
             r.ampScale *
             (1.25 * Math.sin(x * 0.4 + tt * 0.85) +
               0.7 * Math.sin(x * 0.93 - tt * 0.55 + 2.1) +
-              0.42 * Math.sin(x * 1.72 + tt * 1.25 + y * 0.7));
+              0.42 * Math.sin(x * 1.72 + tt * 1.25 + y * 0.7) +
+              push);
           arr[i + 1] = y + env * 0.35 * Math.sin(x * 0.5 + tt * 0.62);
         }
         r.posAttr.needsUpdate = true;
@@ -195,8 +212,9 @@ export function SilkField() {
       }
 
       group.rotation.y += (mx * 0.1 - group.rotation.y) * 0.035;
-      group.rotation.x += (my * 0.05 - group.rotation.x) * 0.035;
+      group.rotation.x += (my * 0.05 - group.rotation.x) * 0.035 + scrollP * 0.38; // 滚动时向后倾倒
       group.rotation.z = Math.sin(t * 0.07) * 0.02; // 极缓慢的呼吸摇摆
+      group.position.y = GROUP_Y - scrollP * 3.2; // 随滚动下沉离场
       renderer.render(scene, camera);
     };
 
@@ -213,6 +231,7 @@ export function SilkField() {
     return () => {
       cancelAnimationFrame(raf);
       window.removeEventListener("pointermove", onPointer);
+      window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onResize);
       for (const r of ribbons) {
         r.geo.dispose();

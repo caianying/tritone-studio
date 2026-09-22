@@ -59,7 +59,7 @@ export default function Hero() {
       />
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-x-0 bottom-0 z-[5] h-[52%] bg-gradient-to-t from-black via-black/55 to-transparent"
+        className="pointer-events-none absolute inset-x-0 bottom-0 z-[5] h-[42%] bg-gradient-to-t from-black via-black/40 to-transparent"
       />
 
       <motion.div
